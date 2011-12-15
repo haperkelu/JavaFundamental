@@ -21,20 +21,19 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 public class TopicHelper {
 
 	private final static String topicName = "Event.DataLogicError";
-	private final static String clientID = "";
+	private final static String clientID = "topic.client";
 	
 	public static void createToic() throws Exception{
 		ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(ActiveMQConnectionFactory.DEFAULT_USER,ActiveMQConnectionFactory.DEFAULT_PASSWORD,ActiveMQConnectionFactory.DEFAULT_BROKER_URL);
 		connectionFactory.setUseAsyncSend(true);   //异步发送
 		Connection connection = connectionFactory.createConnection();
-
 		connection.start();
 		Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 		Topic topic = session.createTopic(topicName);	
 		MessageProducer producer = session.createProducer(topic);
 		producer.setDeliveryMode(DeliveryMode.PERSISTENT);  //可持久化
 
-		String text = "Hello Pie! From Topic";
+		String text = "Hello Pie! From Topic V1";
 		TextMessage message = session.createTextMessage(text);
 		producer.send(message);
 
@@ -46,10 +45,10 @@ public class TopicHelper {
 		
 		ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(ActiveMQConnectionFactory.DEFAULT_USER, ActiveMQConnectionFactory.DEFAULT_PASSWORD, ActiveMQConnectionFactory.DEFAULT_BROKER_URL);
         Connection connection = connectionFactory.createConnection(); 
-        
+        connection.setClientID(clientID);
         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);       
         Topic topic = session.createTopic(topicName);	        
-        MessageConsumer consumer = session.createConsumer(topic);
+        MessageConsumer consumer = session.createDurableSubscriber(topic, topicName);
         consumer.setMessageListener(new MessageListener(){
 			public void onMessage(Message message) {
 				

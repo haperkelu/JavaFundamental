@@ -11,9 +11,11 @@ public class BootStrap {
 
 		//MsgHelper.sendMsg();
 		//MsgHelper.consumeMsg();
+		//MsgHelper.sendMsg();
 		//TopicHelper.createToic();
-		TopicHelper.consumeTopic();
-		TopicHelper.createToic();
+		//Thread.sleep(1000);
+		TopicHelper.consumeTopic();				
+		
 	}
 
 
